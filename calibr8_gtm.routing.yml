@@ -1,0 +1,8 @@
+# Settings page
+calibr8_gtm.settings:
+  path: '/admin/config/calibr8/gtm'
+  defaults:
+    _form: '\Drupal\calibr8_gtm\Form\SettingsForm'
+    _title: 'Google Tag Manager'
+  requirements:
+    _permission: 'administer site configuration'

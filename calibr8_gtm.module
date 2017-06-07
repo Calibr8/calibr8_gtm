@@ -1,0 +1,72 @@
+<?php
+
+/*
+ * Implements hook_theme().
+ */
+function calibr8_gtm_theme() {
+
+  $themes = [
+    'calibr8_gtm_datalayer' => [
+      'variables' => [
+        'gtm_id' => NULL,
+        'data' => NULL,
+      ],
+      'template' => 'calibr8-gtm-datalayer',
+      'render'
+    ],
+    'calibr8_gtm_head' => [
+      'variables' => [
+        'gtm_id' => NULL,
+      ],
+      'template' => 'calibr8-gtm-head',
+      'render'
+    ],
+    'calibr8_gtm_body' => [
+      'variables' => [
+        'gtm_id' => NULL,
+      ],
+      'template' => 'calibr8-gtm-body',
+      'render'
+    ],
+  ];
+
+  return $themes;
+}
+
+/*
+ * Implements hook_preprocess_html().
+ */
+function calibr8_gtm_preprocess_html(&$variables) {
+  $config = \Drupal::config('calibr8_gtm.settings');
+
+  $gtm_id = $config->get('gtm_id');
+  $data = []; // @TODO: Load datalayer data
+
+  if($gtm_id && $data) {
+    $variables['gtm_datalayer'] = [
+      '#theme' => 'calibr8_gtm_datalayer',
+      '#gtm_id' => $gtm_id,
+      '#data' => json_encode($data),
+    ];
+  }
+  if($gtm_id) {
+    $variables['gtm_head'] = [
+      '#theme' => 'calibr8_gtm_head',
+      '#gtm_id' => $gtm_id,
+      '#cache' => [
+        'contexts' => [
+          'theme',
+        ],
+      ],
+    ];
+    $variables['gtm_body'] = [
+      '#theme' => 'calibr8_gtm_body',
+      '#gtm_id' => $gtm_id,
+      '#cache' => [
+        'contexts' => [
+          'theme',
+        ],
+      ],
+    ];
+  }
+}
