@@ -3,5 +3,6 @@ description: Adds Google Tag Manager tracking code and dataLayer.
 package: Calibr8
 type: module
 core: 8.x
+version: '8.x-1.0'
 dependencies:
   - calibr8_admin
