@@ -6,26 +6,26 @@
 function calibr8_gtm_theme() {
 
   $themes = [
-    'calibr8_gtm_datalayer' => [
+    'calibr8_gtm_datalayer_tag' => [
       'variables' => [
         'gtm_id' => NULL,
         'data' => NULL,
       ],
-      'template' => 'calibr8-gtm-datalayer',
+      'template' => 'calibr8-gtm-datalayer-tag',
       'render'
     ],
-    'calibr8_gtm_head' => [
+    'calibr8_gtm_head_tag' => [
       'variables' => [
         'gtm_id' => NULL,
       ],
-      'template' => 'calibr8-gtm-head',
+      'template' => 'calibr8-gtm-head-tag',
       'render'
     ],
-    'calibr8_gtm_body' => [
+    'calibr8_gtm_body_tag' => [
       'variables' => [
         'gtm_id' => NULL,
       ],
-      'template' => 'calibr8-gtm-body',
+      'template' => 'calibr8-gtm-body-tag',
       'render'
     ],
   ];
@@ -40,18 +40,28 @@ function calibr8_gtm_preprocess_html(&$variables) {
   $config = \Drupal::config('calibr8_gtm.settings');
 
   $gtm_id = $config->get('gtm_id');
-  $data = []; // @TODO: Load datalayer data
+  $datalayer = [];
 
-  if($gtm_id && $data) {
+  // invoke all modules
+  \Drupal::moduleHandler()->invokeAll('calibr8_gtm_datalayer', array(&$datalayer));
+  // invoke active theme
+  $theme_name = \Drupal::theme()->getActiveTheme()->getName();
+  \Drupal::moduleHandler()->invoke($theme_name, 'calibr8_gtm_datalayer', array(&$datalayer));
+
+  // ksm($datalayer);
+
+  // Add datalayer code
+  if($gtm_id && $datalayer) {
     $variables['gtm_datalayer'] = [
-      '#theme' => 'calibr8_gtm_datalayer',
+      '#theme' => 'calibr8_gtm_datalayer_tag',
       '#gtm_id' => $gtm_id,
-      '#data' => json_encode($data),
+      '#data' => json_encode($datalayer),
     ];
   }
+  // Add gtm codes
   if($gtm_id) {
     $variables['gtm_head'] = [
-      '#theme' => 'calibr8_gtm_head',
+      '#theme' => 'calibr8_gtm_head_tag',
       '#gtm_id' => $gtm_id,
       '#cache' => [
         'contexts' => [
@@ -60,7 +70,7 @@ function calibr8_gtm_preprocess_html(&$variables) {
       ],
     ];
     $variables['gtm_body'] = [
-      '#theme' => 'calibr8_gtm_body',
+      '#theme' => 'calibr8_gtm_body_tag',
       '#gtm_id' => $gtm_id,
       '#cache' => [
         'contexts' => [
