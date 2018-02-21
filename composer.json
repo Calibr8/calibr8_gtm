@@ -3,7 +3,7 @@
     "description": "Adds tracking code to you pages.",
     "type": "drupal-custom",
     "keywords": ["Drupal 8","GTM"],
-    "homepage": "https://github.com/stevenvdhout/calibr8_gtm",
+    "homepage": "https://github.com/Calibr8/calibr8_gtm",
     "license": "GPL-2.0+",
     "authors": [
         {
